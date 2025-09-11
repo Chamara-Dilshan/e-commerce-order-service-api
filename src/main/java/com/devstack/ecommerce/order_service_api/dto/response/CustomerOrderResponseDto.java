@@ -1,10 +1,8 @@
 package com.devstack.ecommerce.order_service_api.dto.response;
-
 import java.sql.Date;
-import java.util.ArrayList;
-
-import com.devstack.ecommerce.order_service_api.dto.request.OrderDetailRequestDto;
+import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 
 public class CustomerOrderResponseDto {
         private String orderId;
@@ -21,6 +20,6 @@ public class CustomerOrderResponseDto {
         private String status;
         private String userId;
         private String remark;
-        private ArrayList<OrderDetailRequestDto> orderDetails;
+        private List<OrderDetailResponseDto> orderDetails;
     
 }
