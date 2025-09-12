@@ -40,9 +40,16 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     @Override
     public CustomerOrderResponseDto findOrderById(String orderId) {
-        CustomerOrder customerOrder = customerOrderRepo.findById(orderId)
-            .orElseThrow(() -> new RuntimeException(String.format("Order not found with %s",orderId)));
+        CustomerOrder customerOrder = 
+            customerOrderRepo.findById(orderId).orElseThrow(() -> new RuntimeException(String.format("Order not found with %s",orderId)));
         return toCustomerOrderResponseDto(customerOrder);
+    }
+
+    @Override
+    public void deleteById(String orderId) {
+        CustomerOrder customerOrder = 
+            customerOrderRepo.findById(orderId).orElseThrow(() -> new RuntimeException(String.format("Order not found with %s",orderId)));
+        customerOrderRepo.delete(customerOrder);
     }
 
     private CustomerOrderResponseDto toCustomerOrderResponseDto(CustomerOrder customerOrder) {
@@ -89,4 +96,5 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     }
     
+
 }
