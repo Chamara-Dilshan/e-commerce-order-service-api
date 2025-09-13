@@ -6,9 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.devstack.ecommerce.order_service_api.entity.CustomerOrder;
 public interface CustomerOrderRepo extends JpaRepository<CustomerOrder, String> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM customer_order WHERE remark LIKE %?1%")
+    @Query(
+        nativeQuery = true, 
+        value = "SELECT * FROM customer_order WHERE remark LIKE CONCAT('%', ?1, '%')"
+    )
     public Page<CustomerOrder> searchAll(String remark, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(order_id) FROM customer_order WHERE remark LIKE %?1%")
+    @Query(
+        nativeQuery = true, 
+        value = "SELECT COUNT(order_id) FROM customer_order WHERE remark LIKE CONCAT('%', ?1, '%')"
+    )
     public long searchCount(String remark);
 } 
