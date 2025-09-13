@@ -1,8 +1,6 @@
 package com.devstack.ecommerce.order_service_api.service.impl;
-
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.devstack.ecommerce.order_service_api.dto.request.CustomerOrderRequestDto;
@@ -96,7 +94,6 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
         .qty(requestDto.getQty())
         .customerOrder(order)
         .build();
-
     }
 
     @Override
@@ -111,6 +108,31 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
             )
             .build();
     }
-    
 
+    @Override
+    public void updateOrder(CustomerOrderRequestDto requestDto, String orderId) {
+         CustomerOrder customerOrder = 
+            customerOrderRepo.findById(orderId).orElseThrow(() -> new RuntimeException(String.format("Order not found with %s",orderId)));
+        customerOrder.setOrderDate(requestDto.getOrderDate());
+        customerOrder.setTotalAmount(requestDto.getTotalAmount());
+        customerOrderRepo.save(customerOrder);
+    }
+
+    @Override
+    public void manageRemark(String remark, String orderId) {
+        CustomerOrder customerOrder = 
+            customerOrderRepo.findById(orderId).orElseThrow(() -> new RuntimeException(String.format("Order not found with %s",orderId)));
+        customerOrder.setRemark(remark);
+        customerOrderRepo.save(customerOrder);
+    }
+
+    @Override
+    public void manageStatus(String status, String orderId) {
+        CustomerOrder customerOrder = 
+            customerOrderRepo.findById(orderId).orElseThrow(() -> new RuntimeException(String.format("Order not found with %s",orderId)));
+        OrderStatus orderStatus = orderStatusRepo.findByStatus(status).orElseThrow(()-> new RuntimeException("No Such Order Status"));
+        customerOrder.setOrderStatus(orderStatus);
+        customerOrderRepo.save(customerOrder);
+    }
+    
 }
