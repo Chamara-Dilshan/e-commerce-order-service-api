@@ -2,11 +2,14 @@ package com.devstack.ecommerce.order_service_api.service.impl;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.devstack.ecommerce.order_service_api.dto.request.CustomerOrderRequestDto;
 import com.devstack.ecommerce.order_service_api.dto.request.OrderDetailRequestDto;
 import com.devstack.ecommerce.order_service_api.dto.response.CustomerOrderResponseDto;
 import com.devstack.ecommerce.order_service_api.dto.response.OrderDetailResponseDto;
+import com.devstack.ecommerce.order_service_api.dto.response.paginate.CustomerOrderPaginateDto;
 import com.devstack.ecommerce.order_service_api.entity.CustomerOrder;
 import com.devstack.ecommerce.order_service_api.entity.OrderDetail;
 import com.devstack.ecommerce.order_service_api.entity.OrderStatus;
@@ -94,6 +97,19 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
         .customerOrder(order)
         .build();
 
+    }
+
+    @Override
+    public CustomerOrderPaginateDto searchAll(String searchText, int page, int size) {
+        return CustomerOrderPaginateDto.builder()
+            .count(
+                customerOrderRepo.searchCount(searchText)
+            )
+            .dataList(
+                customerOrderRepo.searchAll(searchText, PageRequest.of(page,size))
+                    .stream().map(this::toCustomerOrderResponseDto).collect(Collectors.toList())
+            )
+            .build();
     }
     
 
